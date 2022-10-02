@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
+import styles from './LizingForm.module.sass';
 
 export interface ILizingFormData {
     price: string;
@@ -34,7 +35,7 @@ const LizingForm: FC = () => {
 
     const changeInitialPayment = useCallback(
         (percent: number) => {
-            const newInitialPayment = ((Number(getValues('price')) / 100) * percent).toFixed(2);
+            const newInitialPayment = ((Number(getValues('price')) / 100) * percent).toFixed(1);
             setValue('initialPayment', newInitialPayment.toString());
         },
         [getValues, setValue]
@@ -43,7 +44,7 @@ const LizingForm: FC = () => {
     const changeSum = useCallback(
         (monthPay: number) => {
             setSum(
-                Number((Number(getValues('initialPayment')) + Number(getValues('leasingPeriod')) * monthPay).toFixed(2))
+                Number((Number(getValues('initialPayment')) + Number(getValues('leasingPeriod')) * monthPay).toFixed(1))
             );
         },
         [getValues]
@@ -98,39 +99,52 @@ const LizingForm: FC = () => {
     }, [changeInitialPayment, changeMonthPay, percent, setValue, watch]);
 
     return (
-        <section>
-            <h1>Рассчитайте стоимость автомобиля в лизинг</h1>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <Input
-                    placeholder="Стоимость автомобиля"
-                    register={register}
-                    minRange={1000000}
-                    maxRange={6000000}
-                    name={'price'}
-                />
-                <Input
-                    placeholder="Первоначальный взнос"
-                    register={register}
-                    minRange={10}
-                    maxRange={60}
-                    name={'initialPayment'}
-                    percent={percent}
-                />
-                <Input
-                    placeholder="Срок лизинга"
-                    register={register}
-                    minRange={1}
-                    maxRange={60}
-                    name={'leasingPeriod'}
-                />
-                <div>
-                    <span>Сумма: {sum}</span>
-                    <br />
-                    <span>Платеж: {monthPay}</span>
-                </div>
-
-                <Button title="Оставить заявку" />
-            </form>
+        <section className={styles.lizing}>
+            <div className={styles.lizingWrap}>
+                <h1 className={styles.title}>Рассчитайте стоимость автомобиля в лизинг</h1>
+                <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+                    <div className={styles.formInput}>
+                        <Input
+                            placeholder="Стоимость автомобиля"
+                            register={register}
+                            minRange={1000000}
+                            maxRange={6000000}
+                            name={'price'}
+                            description="₽"
+                        />
+                        {/* <span className={styles.label}>P</span> */}
+                        <Input
+                            placeholder="Первоначальный взнос"
+                            register={register}
+                            minRange={10}
+                            maxRange={60}
+                            name={'initialPayment'}
+                            percent={percent}
+                        />
+                        <Input
+                            placeholder="Срок лизинга"
+                            register={register}
+                            minRange={1}
+                            maxRange={60}
+                            name={'leasingPeriod'}
+                            description="мес."
+                        />
+                    </div>
+                    <div className={styles.wrap}>
+                        <div className={styles.block}>
+                            <p className={styles.text}>Сумма договора лизинга</p>
+                            <span className={styles.sum}>{sum}</span>
+                        </div>
+                        <div className={styles.block}>
+                            <p className={styles.text}>Ежемесячный платеж от</p>
+                            <span className={styles.sum}>{monthPay}</span>
+                        </div>
+                        <div className={styles.block}>
+                            <Button title="Оставить заявку" />
+                        </div>
+                    </div>
+                </form>
+            </div>
         </section>
     );
 };

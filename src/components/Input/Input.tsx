@@ -19,8 +19,9 @@ interface IInputProps {
     name: InputNames;
     placeholder: string;
     percent?: number;
+    description?: string;
 }
-const Input: FC<IInputProps> = ({ minRange, maxRange, register, name, placeholder, percent }) => {
+const Input: FC<IInputProps> = ({ minRange, maxRange, register, name, placeholder, percent, description }) => {
     return (
         <div className={styles.wrap}>
             <span className={styles.placeholder}>{placeholder}</span>
@@ -35,6 +36,7 @@ const Input: FC<IInputProps> = ({ minRange, maxRange, register, name, placeholde
                         {...register(`${name}Range` as InputNames)}
                     />
                 </div>
+                {description && <span className={styles.percentLabel}>{description}</span>}
                 {percent && <span className={styles.percentLabel}>{percent}%</span>}
             </div>
         </div>

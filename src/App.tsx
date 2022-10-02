@@ -1,11 +1,11 @@
-import React from 'react';
+import styles from './styles/Global.module.sass'
 import LizingForm from './components/LizingForm/LizingForm';
 
 import './styles/fonts.sass';
 
 function App() {
     return (
-        <div className="App">
+        <div className={styles.global}>
             <LizingForm />
         </div>
     );
