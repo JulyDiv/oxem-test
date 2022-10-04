@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { ILizingFormData } from '../LizingForm/LizingForm';
+import { formatNumber } from '../LizingForm/utils';
 import styles from './Input.module.sass';
 
 type InputNames =
@@ -27,7 +28,7 @@ const Input: FC<IInputProps> = ({ minRange, maxRange, register, name, placeholde
         <div className={styles.wrap}>
             <span className={styles.placeholder}>{placeholder}</span>
             <div className={styles.inputWrap}>
-                <input type="number" className={styles.input} {...register(name)} max={max} />
+                <input type="text" className={styles.input} {...register(name)} max={max} />
                 <div className={styles.rangeWrap}>
                     <input
                         className={styles.range}
@@ -37,16 +38,11 @@ const Input: FC<IInputProps> = ({ minRange, maxRange, register, name, placeholde
                         {...register(`${name}Range` as InputNames)}
                     />
                 </div>
-                {description && (
-                    <span className={styles.label}>
-                        {description}
-                    </span>
-                )}
+                {description && <span className={styles.label}>{description}</span>}
                 {percent && <span className={styles.percentLabel}>{percent}%</span>}
             </div>
         </div>
     );
 };
-
 
 export default Input;

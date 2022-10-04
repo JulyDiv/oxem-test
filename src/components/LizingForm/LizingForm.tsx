@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import styles from './LizingForm.module.sass';
+import { deleteSpace, formatNumber } from './utils';
 
 export interface ILizingFormData {
     price: string;
@@ -16,65 +17,80 @@ export interface ILizingFormData {
 
 const LizingForm: FC = () => {
     const [percent, setPercent] = useState(13);
-    const [sum, setSum] = useState(0);
-    const [monthPay, setMonthPay] = useState(0);
+    const [sum, setSum] = useState('0');
+    const [monthPay, setMonthPay] = useState('0');
 
     const { register, handleSubmit, watch, setValue, getValues, reset } = useForm<ILizingFormData>({
         defaultValues: {
-            price: '3300000',
+            price: '3 300 000',
             priceRange: '3300000',
-            initialPayment: '429000',
+            initialPayment: '429 000',
             initialPaymentRange: '13',
             leasingPeriod: '60',
             leasingPeriodRange: '60'
         }
     });
 
-    const onSubmit = useCallback((data: ILizingFormData) => {
-        console.log(data);
-        axios
-            .post('https://eoj3r7f3r4ef6v4.m.pipedream.net', {
-                price: data.price,
-                initialPayment: data.initialPayment,
-                leasingPeriod: data.leasingPeriod
-            })
-            .then(({ data }) => {
-                console.log(data);
-            })
-            .catch(function (error) {
-                console.log(error.message);
-            });
-        reset();
-    }, [reset]);
+    const onSubmit = useCallback(
+        (data: ILizingFormData) => {
+            console.log(data);
+            axios
+                .post('https://eoj3r7f3r4ef6v4.m.pipedream.net', {
+                    price: data.price,
+                    initialPayment: data.initialPayment,
+                    leasingPeriod: data.leasingPeriod
+                })
+                .then(({ data }) => {
+                    console.log(data);
+                })
+                .catch(function (error) {
+                    console.log(error.message);
+                });
+            reset();
+        },
+        [reset]
+    );
 
     const changeInitialPayment = useCallback(
         (percent: number) => {
-            const newInitialPayment = (Math.round((Number(getValues('price')) / 100) * percent));
-            setValue('initialPayment', newInitialPayment.toString());
+            const newInitialPayment = Math.round((deleteSpace(getValues('price')) / 100) * percent);
+            setValue('initialPayment', formatNumber(newInitialPayment.toString()));
         },
         [getValues, setValue]
     );
 
     const changeSum = useCallback(
         (monthPay: number) => {
-            setSum(Math.round(
-                Number((Number(getValues('initialPayment')) + Number(getValues('leasingPeriod')) * monthPay)))
+            console.log(monthPay);
+            setSum(
+                formatNumber(
+                    Math.round(
+                        deleteSpace(
+                            deleteSpace(getValues('initialPayment')) +
+                                deleteSpace(getValues('leasingPeriod')) * monthPay
+                        )
+                    )
+                )
             );
         },
         [getValues]
     );
 
     const changeMonthPay = useCallback(() => {
-        const newValue = (
-            Math.round(
-            Number(getValues('price')) -
-            Number(getValues('initialPayment')) *
-                ((0.035 * Math.pow(1 + 0.035, Number(getValues('leasingPeriod')))) /
-                    (Math.pow(1 + 0.035, Number(getValues('leasingPeriod'))) - 1))
-        ));
-        setMonthPay(Number(newValue));
-        changeSum(Number(newValue));
+        const newValue = Math.round(
+            deleteSpace(getValues('price')) -
+                deleteSpace(getValues('initialPayment')) *
+                    ((0.035 * Math.pow(1 + 0.035, deleteSpace(getValues('leasingPeriod')))) /
+                        (Math.pow(1 + 0.035, deleteSpace(getValues('leasingPeriod'))) - 1))
+        );
+        setMonthPay(formatNumber(newValue));
+        changeSum(newValue);
     }, [changeSum, getValues]);
+
+
+    useEffect(() =>{
+        changeMonthPay()
+    },[changeMonthPay])
 
     useEffect(() => {
         const subscription = watch((value, { name, type }) => {
@@ -82,20 +98,24 @@ const LizingForm: FC = () => {
                 // console.log(value[name]);
                 switch (name) {
                     case 'priceRange':
-                        setValue('price', value[name] as string);
+                        console.log(formatNumber(value[name] as string));
+                        setValue('price', formatNumber(value[name] as string));
                         changeInitialPayment(percent);
                         changeMonthPay();
                         break;
                     case 'price':
+                        console.log('+++++');
                         const priceValue =
-                            value[name] && Number(value[name]) > 1000000 ? (value[name] as string) : '1000000';
+                            value[name] && deleteSpace(value[name] as string) > 1000000
+                                ? (value[name] as string)
+                                : '1000000';
                         setValue('priceRange', priceValue.toLocaleString());
                         changeInitialPayment(percent);
                         changeMonthPay();
                         break;
                     case 'initialPaymentRange':
-                        setPercent(Number(value[name]));
-                        changeInitialPayment(Number(value[name]));
+                        setPercent(deleteSpace(value[name] as string));
+                        changeInitialPayment(deleteSpace(value[name] as string));
                         changeMonthPay();
                         break;
                     case 'leasingPeriodRange':
