@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { ILizingFormData } from '../LizingForm/LizingForm';
-import { formatNumber } from '../LizingForm/utils';
+// import { formatNumber } from '../LizingForm/utils';
 import styles from './Input.module.sass';
 
 type InputNames =
