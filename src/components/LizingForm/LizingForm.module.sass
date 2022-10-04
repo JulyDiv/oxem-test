@@ -13,6 +13,7 @@
     line-height: 90%
 
 .formInput
+    position: relative
     display: flex
     justify-content: space-between
 
@@ -23,7 +24,7 @@
 .block
     width: 427px
 .text
-    // margin: 0 268px 8px 0
+    margin: 0 0 8px 0
     font-family: Gilroy
     font-style: normal
     font-weight: 400
@@ -38,7 +39,7 @@
     line-height: 90%
     color: #575757
 
-@media (max-width: 1137px)
+@media (max-width: 1024px)
     .lizing
         padding: 100px 0
     .lizingWrap
@@ -47,7 +48,6 @@
         flex-wrap: wrap
     .title
         margin: 0 0 44px 0
-        color: pink
     .formInput
         display: block
     .text
@@ -55,17 +55,15 @@
         display: inline-block
         margin-bottom: 44px
         color: #333333
-@media (max-width: 853px)
+@media (max-width: 768px)
     .lizing
         padding: 64px 0
     .lizingWrap
         margin: auto
         width: 696px
-    .title
-        color: red
     .block
         width: 313px
-@media (max-width: 355px)
+@media (max-width: 320px)
     .lizing
         padding: 44px 0
     .lizingWrap
@@ -74,7 +72,6 @@
     .title
         margin: 0 0 31px 0
         width: 224px
-        color: green
         font-size: 34px
     .text
         margin: 0 0 2px 0
@@ -82,3 +79,44 @@
     .sum
         margin-bottom: 29px
         font-size: 22px
+
+// @media (max-width: 1137px)
+//     .lizing
+//         padding: 100px 0
+//     .lizingWrap
+//         margin: auto
+//         width: 928px
+//         flex-wrap: wrap
+//     .title
+//         margin: 0 0 44px 0
+//     .formInput
+//         display: block
+//     .text
+//     .sum
+//         display: inline-block
+//         margin-bottom: 44px
+//         color: #333333
+// @media (max-width: 853px)
+//     .lizing
+//         padding: 64px 0
+//     .lizingWrap
+//         margin: auto
+//         width: 696px
+//     .block
+//         width: 313px
+// @media (max-width: 355px)
+//     .lizing
+//         padding: 44px 0
+//     .lizingWrap
+//         margin: auto
+//         width: 280px
+//     .title
+//         margin: 0 0 31px 0
+//         width: 224px
+//         font-size: 34px
+//     .text
+//         margin: 0 0 2px 0
+//         font-size: 14px
+//     .sum
+//         margin-bottom: 29px
+//         font-size: 22px

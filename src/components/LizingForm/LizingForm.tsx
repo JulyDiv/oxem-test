@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '../Button/Button';
@@ -18,7 +19,7 @@ const LizingForm: FC = () => {
     const [sum, setSum] = useState(0);
     const [monthPay, setMonthPay] = useState(0);
 
-    const { register, handleSubmit, watch, setValue, getValues } = useForm<ILizingFormData>({
+    const { register, handleSubmit, watch, setValue, getValues, reset } = useForm<ILizingFormData>({
         defaultValues: {
             price: '3300000',
             priceRange: '3300000',
@@ -31,11 +32,24 @@ const LizingForm: FC = () => {
 
     const onSubmit = useCallback((data: ILizingFormData) => {
         console.log(data);
+        axios
+            .post('https://eoj3r7f3r4ef6v4.m.pipedream.net', {
+                price: data.price,
+                initialPayment: data.initialPayment,
+                leasingPeriod: data.leasingPeriod
+            })
+            .then(({ data }) => {
+                console.log(data);
+            })
+            .catch(function (error) {
+                console.log(error.message);
+            });
+        reset();
     }, []);
 
     const changeInitialPayment = useCallback(
         (percent: number) => {
-            const newInitialPayment = ((Number(getValues('price')) / 100) * percent).toFixed(1);
+            const newInitialPayment = (Math.round((Number(getValues('price')) / 100) * percent));
             setValue('initialPayment', newInitialPayment.toString());
         },
         [getValues, setValue]
@@ -43,8 +57,8 @@ const LizingForm: FC = () => {
 
     const changeSum = useCallback(
         (monthPay: number) => {
-            setSum(
-                Number((Number(getValues('initialPayment')) + Number(getValues('leasingPeriod')) * monthPay).toFixed(1))
+            setSum(Math.round(
+                Number((Number(getValues('initialPayment')) + Number(getValues('leasingPeriod')) * monthPay)))
             );
         },
         [getValues]
@@ -52,11 +66,12 @@ const LizingForm: FC = () => {
 
     const changeMonthPay = useCallback(() => {
         const newValue = (
+            Math.round(
             Number(getValues('price')) -
             Number(getValues('initialPayment')) *
                 ((0.035 * Math.pow(1 + 0.035, Number(getValues('leasingPeriod')))) /
                     (Math.pow(1 + 0.035, Number(getValues('leasingPeriod'))) - 1))
-        ).toFixed(2);
+        ));
         setMonthPay(Number(newValue));
         changeSum(Number(newValue));
     }, [changeSum, getValues]);
@@ -64,7 +79,7 @@ const LizingForm: FC = () => {
     useEffect(() => {
         const subscription = watch((value, { name, type }) => {
             if (name && type === 'change') {
-                console.log(value[name]);
+                // console.log(value[name]);
                 switch (name) {
                     case 'priceRange':
                         setValue('price', value[name] as string);
@@ -74,7 +89,7 @@ const LizingForm: FC = () => {
                     case 'price':
                         const priceValue =
                             value[name] && Number(value[name]) > 1000000 ? (value[name] as string) : '1000000';
-                        setValue('priceRange', priceValue);
+                        setValue('priceRange', priceValue.toLocaleString());
                         changeInitialPayment(percent);
                         changeMonthPay();
                         break;
@@ -111,8 +126,8 @@ const LizingForm: FC = () => {
                             maxRange={6000000}
                             name={'price'}
                             description="₽"
+                            max={6000000}
                         />
-                        {/* <span className={styles.label}>P</span> */}
                         <Input
                             placeholder="Первоначальный взнос"
                             register={register}
@@ -120,6 +135,7 @@ const LizingForm: FC = () => {
                             maxRange={60}
                             name={'initialPayment'}
                             percent={percent}
+                            max={3600000}
                         />
                         <Input
                             placeholder="Срок лизинга"
@@ -128,19 +144,20 @@ const LizingForm: FC = () => {
                             maxRange={60}
                             name={'leasingPeriod'}
                             description="мес."
+                            max={60}
                         />
                     </div>
                     <div className={styles.wrap}>
                         <div className={styles.block}>
                             <p className={styles.text}>Сумма договора лизинга</p>
-                            <span className={styles.sum}>{sum}</span>
+                            <span className={styles.sum}>{sum.toLocaleString()} ₽</span>
                         </div>
                         <div className={styles.block}>
                             <p className={styles.text}>Ежемесячный платеж от</p>
-                            <span className={styles.sum}>{monthPay}</span>
+                            <span className={styles.sum}>{monthPay.toLocaleString()} ₽</span>
                         </div>
                         <div className={styles.block}>
-                            <Button title="Оставить заявку" />
+                            <Button type="submit" title="Оставить заявку" />
                         </div>
                     </div>
                 </form>

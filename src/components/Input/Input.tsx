@@ -20,13 +20,14 @@ interface IInputProps {
     placeholder: string;
     percent?: number;
     description?: string;
+    max?: number;
 }
-const Input: FC<IInputProps> = ({ minRange, maxRange, register, name, placeholder, percent, description }) => {
+const Input: FC<IInputProps> = ({ minRange, maxRange, register, name, placeholder, percent, description, max }) => {
     return (
         <div className={styles.wrap}>
             <span className={styles.placeholder}>{placeholder}</span>
             <div className={styles.inputWrap}>
-                <input type="text" className={styles.input} {...register(name)} />
+                <input type="number" className={styles.input} {...register(name)} max={max} />
                 <div className={styles.rangeWrap}>
                     <input
                         className={styles.range}
@@ -36,11 +37,16 @@ const Input: FC<IInputProps> = ({ minRange, maxRange, register, name, placeholde
                         {...register(`${name}Range` as InputNames)}
                     />
                 </div>
-                {description && <span className={styles.percentLabel}>{description}</span>}
+                {description && (
+                    <span className={styles.label}>
+                        {description}
+                    </span>
+                )}
                 {percent && <span className={styles.percentLabel}>{percent}%</span>}
             </div>
         </div>
     );
 };
+
 
 export default Input;

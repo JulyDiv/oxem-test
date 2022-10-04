@@ -5,11 +5,13 @@ import styles from './Button.module.sass';
 interface IButtonProps {
     title: string;
     isLoading?: boolean;
+    type: string;
 }
 
 const Button: FC<IButtonProps> = ({ title, isLoading }) => {
     return (
-        <button className={classNames(styles.button, isLoading && styles.loadingBtn)}>
+        <button
+            className={classNames(styles.button, isLoading && styles.loadingBtn)}>
             {isLoading ? (
                 <div className={styles.loader}>
                     <div></div>
