@@ -45,7 +45,7 @@ const LizingForm: FC = () => {
                 console.log(error.message);
             });
         reset();
-    }, []);
+    }, [reset]);
 
     const changeInitialPayment = useCallback(
         (percent: number) => {
