@@ -1,5 +1,6 @@
 #### Oxem-test
 #### Тестовое задание в компанию Oxem
+#### Ссылка на проект: https://elegant-semifreddo-9928a1.netlify.app/
 
 ![ox-test](https://user-images.githubusercontent.com/99066910/196436596-3ec3ccfa-335a-4b68-8100-13f43b8825a0.PNG)
 
