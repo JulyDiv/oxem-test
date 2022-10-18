@@ -1,3 +1,24 @@
+#### Oxem-test
+#### Тестовое задание в компанию Oxem
+
+![ox-test](https://user-images.githubusercontent.com/99066910/196436596-3ec3ccfa-335a-4b68-8100-13f43b8825a0.PNG)
+
+![ox-test-mobile](https://user-images.githubusercontent.com/99066910/196436573-25aead2b-5c0e-4a0b-a51f-78c8e116f023.PNG)
+
+#### Cтек технологий:
+
+:star2: React <br>
+:star2: FC - работала на функциональных компонентах <br>
+:star2: Sass-module - стилизовала компоненты <br>
+:star2: TS <br>
+:star2: Hooks - useState, useEffect, useCallback, useMemo, useRouter <br>
+:star2: React-hook-form - использовала для валидации форм <br>
+
+##### Связаться со мной: 
+##### [https://t.me/julia_gerber] - Telegram
+##### [https://vk.com/id526712821] - VK
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
